@@ -1,0 +1,82 @@
+objstoreConfig: |-
+  type: s3
+  config:
+    bucket: "vruddha-monitoring"
+    endpoint: "s3.ca-central-1.amazonaws.com"
+    region: "ca-central-1"
+    access_key: "AKIA6E4TVTQO73ORPEGN"  
+    secret_key: "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"
+query:
+  logLevel: debug  
+  stores:     
+    - prom-kube-prometheus-stack-thanos-discovery.monitoring.svc.cluster.local:10901 
+    - thanos-storegateway.monitoring.svc.cluster.local:10901
+  dnsDiscovery:
+    enabled: false
+  #service:
+  #  type: LoadBalancer
+  #  annotations:
+  #    eks.amazonaws.com/role-arn: arn:aws:iam::972582919197:role/vruddha-monitoring  
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::972582919197:role/vruddha-monitoring
+  #grpc:
+  #  client:
+  #    serverName: "prom-kube-prometheus-stack-thanos-discovery.monitoring.svc.cluster.local"
+  #    tls:
+  #      enabled: false
+      #  cert: |-
+      #  key: |-
+      #  ca: |-
+    #server:
+    #  tls:
+    #    enabled: true
+  ingress:
+    enabled: true   
+    tls: false
+    annotations:
+        kubernetes.io/ingress.class: nginx
+    #grpc:
+    #  enabled: true
+    #  hostname: thanos.xyz.com
+      #ingressClassName: nginx
+    #  annotations:
+    #    kubernetes.io/ingress.class: nginx
+        #nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+        #ingress.kubernetes.io/ssl-redirect: "true"
+    #    #kubernetes.io/ingress.class: nginx-internal
+    #    ingress.kubernetes.io/ssl-redirect: "true"
+        # nginx.ingress.kubernetes.io/grpc-backend: "true"
+        #ingress.kubernetes.io/auth-tls-verify-client: "on"
+        #ingress.kubernetes.io/auth-tls-secret: "thanos-tls-secret"
+        #ingress.kubernetes.io/backend-protocol: "GRPCS"
+    #  paths:
+    #    - /
+      #pathType: ImplementationSpecific
+      #extraTls: 
+      #  - hosts:
+      #    - thanos.xyz.com
+      #    secretName: thanos-tls-secret
+
+storegateway:
+  enabled: true
+  loglevel: "debug"
+  podAnnotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::972582919197:role/vruddha-monitoring  
+  serviceAccount:    
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::972582919197:role/vruddha-monitoring   
+ruler:
+  enabled: false
+  #alertmanagers:
+  #  - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
+  #config: |-
+  #  groups:
+  #  - name: "metamonitoring"
+  #      rules:
+  #        - alert: "PrometheusDown"
+  #          expr: absent(up{prometheus="monitoring/kube-prometheus"})
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true

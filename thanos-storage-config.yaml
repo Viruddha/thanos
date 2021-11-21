@@ -1,0 +1,5 @@
+type: s3
+config:
+   bucket: vruddha-monitoring
+   endpoint: s3.ca-central-1.amazonaws.com
+   
